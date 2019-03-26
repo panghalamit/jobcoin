@@ -89,7 +89,13 @@ func (blockchain *Jobcoin) FundAddress(ctx context.Context, fundAddrArg *pb.Addr
 	}
 	if value < 0 {
 		return &pb.Result{Result: &pb.Result_Bal{Bal: &pb.Balance{Balance: blockchain.balances[addr]}}}, errors.New("Jobcoin FundAddress failure: value < 0")
-	}
+	}// initializes jobcoin
+func InitJobcoin(txFee int64) (*Jobcoin, error) {
+	balances := make(map[string]int64)
+	randomS = rand.NewSource(time.Now().UnixNano())
+
+	return &Jobcoin{sync.RWMutex{}, balances, txFee}, nil
+}
 	blockchain.balances[addr] += value
 	return &pb.Result{Result: &pb.Result_Bal{Bal: &pb.Balance{Balance: blockchain.balances[addr]}}}, nil
 }
